@@ -5,7 +5,10 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "bot": "node --env-file=.env.local scripts/odoo-ai-bot.mjs",
+    "deploy:dev": "bash scripts/deploy-dev.sh",
+    "deploy:test": "bash scripts/deploy-dev.sh --test-only"
   },
   "dependencies": {
     "next": "14.1.0",
