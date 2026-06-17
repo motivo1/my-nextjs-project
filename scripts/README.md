@@ -1,7 +1,7 @@
 # Odoo Discuss AI Bot
 
 Brings the PV Partner manager agents into an Odoo Discuss channel. Watches a
-channel for messages starting with `/ai`, routes them to a manager agent,
+channel for messages starting with `ai:`, routes them to a manager agent,
 calls OpenRouter (GLM-5.2), and posts the reply back into the channel.
 
 ## How it runs (the app way)
@@ -21,7 +21,7 @@ GET /api/bot/status
 
 ```json
 { "started": true, "enabled": true, "configured": true,
-  "channelId": 28, "trigger": "/ai", "model": "z-ai/glm-5.2" }
+  "channelId": 28, "trigger": "ai:", "model": "z-ai/glm-5.2" }
 ```
 
 The deployed container must have the env vars (`OPENROUTER_API_KEY`,
@@ -30,18 +30,21 @@ present (`env_file`, optional). To turn the bot off: `ENABLE_DISCUSS_BOT=false`.
 
 ## Usage in Discuss
 
-In the channel (default id `28`):
+In the channel (default id `28`), type messages starting with `ai:`:
 
 | Command | Result |
 | --- | --- |
-| `/ai <question>` | Default agent (eCommerce Manager) answers |
-| `/ai sales-director: <question>` | A specific agent answers (`slug:` prefix) |
-| `/ai @seo-content <question>` | Same, with `@slug` prefix |
-| `/ai list` | Lists all 10 agents and their slugs |
-| `/ai help` | Shows usage |
+| `ai: <question>` | Default agent (eCommerce Manager) answers |
+| `ai: sales-director: <question>` | A specific agent answers (`slug:` prefix) |
+| `ai: @seo-content <question>` | Same, with `@slug` prefix |
+| `ai: list` | Lists all 10 agents and their slugs |
+| `ai: help` | Shows usage |
 
-The bot only reacts to messages starting with the trigger, and its own replies
-never start with it — so it cannot reply to itself.
+The default trigger is `ai:` (no leading slash) because Odoo's Discuss composer
+intercepts messages starting with `/` as native slash commands — an unregistered
+`/ai` is swallowed client-side and never posted to the channel. The bot only
+reacts to messages starting with the trigger, and its own replies never start
+with it — so it cannot reply to itself.
 
 ## Optional: run as a standalone process
 
@@ -65,7 +68,7 @@ npm run bot
 | `ODOO_API_KEY` | yes | — |
 | `ENABLE_DISCUSS_BOT` | no | `true` (set `false` to disable) |
 | `BOT_CHANNEL_ID` | no | `28` |
-| `BOT_TRIGGER` | no | `/ai` |
+| `BOT_TRIGGER` | no | `ai:` |
 | `BOT_POLL_MS` | no | `5000` |
 | `AI_DEFAULT_AGENT` | no | `ecommerce-manager` |
 
@@ -74,15 +77,15 @@ The message cursor is stored in Odoo (`ir.config_parameter`, key
 across instances. On first run it starts from the newest message (no history
 replay).
 
-## If `/ai` doesn't trigger
+## Why `ai:` instead of `/ai`?
 
-Odoo's Discuss composer treats a leading `/` as a slash command. In some
-configurations an unrecognized `/ai` is intercepted client-side and is **not**
-posted to the channel — so the bot never sees it. If that happens, switch to a
-non-slash trigger and tell the team to use it:
+Odoo's Discuss composer treats a leading `/` as a slash command. An unrecognized
+`/ai` is intercepted client-side and is **not** posted to the channel — so the
+bot never sees it. The default trigger is therefore `ai:` (no slash). To use a
+different prefix, set `BOT_TRIGGER`:
 
 ```
-BOT_TRIGGER=ai:      # team types:  ai: your question
+BOT_TRIGGER=hey-bot      # team types:  hey-bot your question
 ```
 
 (A native `/ai` slash command would require a custom Odoo addon instead.)
