@@ -12,7 +12,7 @@ export function generateMetadata({ params }) {
   return { title: `${agent.name} — PV Partner AI` };
 }
 
-function PromptCard({ prompt }) {
+function PromptCard({ prompt, agentSlug }) {
   return (
     <div className="prompt-card">
       <h4>
@@ -20,6 +20,13 @@ function PromptCard({ prompt }) {
         {prompt.title}
       </h4>
       <p className="prompt-text">{prompt.prompt}</p>
+      <a
+        href={`/chat/${agentSlug}?prompt=${prompt.id}`}
+        className="btn-chat"
+        style={{ marginTop: 12, display: "inline-flex", fontSize: 12 }}
+      >
+        Use in Chat
+      </a>
     </div>
   );
 }
@@ -40,9 +47,14 @@ export default function AgentDetailPage({ params }) {
     <main>
       <div className="container">
         <div className="agent-detail">
-          <a href="/agents" className="back-link">
-            &larr; All Agents
-          </a>
+          <div style={{ display: "flex", gap: 16, alignItems: "center", marginBottom: 24 }}>
+            <a href="/agents" className="back-link" style={{ marginBottom: 0 }}>
+              &larr; All Agents
+            </a>
+            <a href={`/chat/${agent.slug}`} className="btn-chat">
+              Chat with {agent.name}
+            </a>
+          </div>
 
           <div className="agent-detail-header">
             <div className="agent-detail-icon" style={{ background: agent.color }}>
@@ -71,7 +83,7 @@ export default function AgentDetailPage({ params }) {
               <div key={cat} className="prompt-section">
                 <h3 className="prompt-category">{cat}</h3>
                 {promptsByCategory[cat].map((prompt) => (
-                  <PromptCard key={prompt.id} prompt={prompt} />
+                  <PromptCard key={prompt.id} prompt={prompt} agentSlug={agent.slug} />
                 ))}
               </div>
             ))}

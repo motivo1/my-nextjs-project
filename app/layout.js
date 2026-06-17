@@ -21,13 +21,13 @@ export default function RootLayout({ children }) {
                 <a href="/">Dashboard</a>
               </li>
               <li>
-                <a href="/agents">Agents</a>
+                <a href="/agents">Agents & Prompts</a>
               </li>
               <li>
                 <a href="/linkedin">LinkedIn</a>
               </li>
               <li>
-                <a href="/api/agents">API</a>
+                <a href="/api/odoo">Odoo API</a>
               </li>
             </ul>
           </div>

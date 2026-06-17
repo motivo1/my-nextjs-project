@@ -10,10 +10,10 @@ export default function Home() {
       <div className="container">
         <section className="hero">
           <span className="hero-badge">Odoo Mentor & AI Manager for eCommerce</span>
-          <h1>AI Manager Agents for PV Partner</h1>
+          <h1>PV Partner AI Agents</h1>
           <p>
-            10 specialized AI agents managing every aspect of solar eCommerce — from sales pipeline
-            to LinkedIn thought leadership. Powered by Odoo.
+            10 AI manager agents for solar eCommerce — connected to your Odoo ERP at
+            dev-erp.asunim.co and powered by OpenRouter.
           </p>
           <div className="hero-stats">
             <div className="stat">
@@ -36,14 +36,13 @@ export default function Home() {
             <div>
               <h2 className="section-title">Manager Agents</h2>
               <p className="section-subtitle">
-                Each agent is an AI specialist managing a critical business function for{" "}
-                {COMPANY.domain}
+                Select an agent to chat — each one is a specialist for {COMPANY.domain}
               </p>
             </div>
           </div>
           <div className="agent-grid">
             {AGENTS.map((agent) => (
-              <a key={agent.slug} href={`/agents/${agent.slug}`} className="agent-card">
+              <div key={agent.slug} className="agent-card" style={{ cursor: "default" }}>
                 <div className="agent-card-header">
                   <div className="agent-icon" style={{ background: agent.color }}>
                     {agent.name.charAt(0)}
@@ -54,11 +53,15 @@ export default function Home() {
                   </div>
                 </div>
                 <p className="agent-description">{agent.description}</p>
-                <div className="agent-meta">
-                  <span>7 prompts</span>
-                  <span>System prompt configured</span>
+                <div className="agent-card-actions">
+                  <a href={`/chat/${agent.slug}`} className="btn-chat">
+                    Chat
+                  </a>
+                  <a href={`/agents/${agent.slug}`} className="btn-prompts">
+                    Prompts
+                  </a>
                 </div>
-              </a>
+              </div>
             ))}
           </div>
         </section>
@@ -68,13 +71,13 @@ export default function Home() {
             <div>
               <h2 className="section-title">Platform</h2>
               <p className="section-subtitle">
-                Built for {COMPANY.name} — {COMPANY.industry}
+                {COMPANY.name} — {COMPANY.industry} on Odoo
               </p>
             </div>
           </div>
           <div className="agent-grid">
             <div className="agent-card" style={{ cursor: "default" }}>
-              <h3 style={{ marginBottom: 12 }}>Supported Products</h3>
+              <h3 style={{ marginBottom: 12 }}>Products</h3>
               <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
                 {COMPANY.products.map((p) => (
                   <span
