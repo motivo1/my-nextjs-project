@@ -2,16 +2,27 @@ services:
   web_blue:
     build: .
     container_name: my-nextjs-blue
+    # Loads OPENROUTER_* and ODOO_* secrets if the file is present on the host.
+    env_file:
+      - path: .env.local
+        required: false
     environment:
       - NODE_ENV=production
+      # The Discuss AI bot runs on this instance only (single poller).
+      - ENABLE_DISCUSS_BOT=true
     expose:
       - "3000"
 
   web_green:
     build: .
     container_name: my-nextjs-green
+    env_file:
+      - path: .env.local
+        required: false
     environment:
       - NODE_ENV=production
+      # Disabled here so blue + green don't both answer the same message.
+      - ENABLE_DISCUSS_BOT=false
     expose:
       - "3000"
 
